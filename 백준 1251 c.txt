@@ -1,0 +1,44 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+char output[51];
+
+void reverse(char *str, int start, int end)
+{
+	for (int i = start; i <= (start + end) / 2; i++)
+	{
+		char temp = str[i];
+		str[i] = str[end - i + start];
+		str[end - i + start] = temp;
+	}
+}
+
+int main()
+{
+	int i, j, len;
+	char str[51], temp[51];
+	scanf("%s", str);
+	len = strlen(str);
+
+	for (i = 0; i < 50; i++)
+		output[i] = 'z';
+
+	for (i = 0; i < len; i++)
+	{
+		for (j = i + 1; j < len - 1; j++)
+		{
+			strcpy(temp, str);
+			reverse(temp, 0, i);
+			reverse(temp, i + 1, j);
+			reverse(temp, j + 1, len - 1);
+
+			if (strcmp(temp, output) < 0)
+				strcpy(output, temp);
+		}
+	}
+	
+	printf("%s", output);
+
+	return 0;
+}
