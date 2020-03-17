@@ -1,0 +1,77 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+
+int comp(const void *a, const void *b)
+{
+	return strcmp(*(char **)a, *(char **)b);
+}
+
+char **output;
+int size = 0;
+
+void Search(char **notSee, char *notHear, int start, int end)
+{
+	if (start > end)
+		return;
+	int mid = (start + end) / 2;
+
+	if (strcmp(notSee[mid], notHear) < 0)	Search(notSee, notHear, mid + 1, end);
+	if (strcmp(notSee[mid], notHear) > 0)	Search(notSee, notHear, start, mid - 1);
+	if (strcmp(notSee[mid], notHear) == 0)
+	{
+		output[size] = (char *)malloc(sizeof(char) * 21);
+		strcpy(output[size], notHear);
+		size++;
+	}
+}
+
+int main()
+{
+	char **notHear, **notSee;
+	int i, n, m;
+	scanf("%d %d", &n, &m);
+	getchar();
+
+	notHear = (char **)malloc(sizeof(char *) * n);
+	notSee = (char **)malloc(sizeof(char *) * m);
+
+	for (i = 0; i < n; i++)
+	{
+		notHear[i] = (char *)malloc(sizeof(char) * 21);
+		scanf("%s", notHear[i]);
+	}
+	qsort(notHear, n, sizeof(notHear[0]), comp);
+
+	for (i = 0; i < m; i++)
+	{
+		notSee[i] = (char *)malloc(sizeof(char) * 21);
+		scanf("%s", notSee[i]);
+	}
+	qsort(notSee, m, sizeof(notSee[0]), comp);
+
+	output = (char **)malloc(sizeof(char *) * fmin(n, m));
+	
+	for (i = 0; i < n; i++)
+		Search(notSee, notHear[i], 0, m - 1);
+
+	printf("%d\n", size);
+	for (i = 0; i < size; i++)
+		printf("%s\n", output[i]);
+
+	for (i = 0; i < n; i++)
+		free(notHear[i]);
+	free(notHear);
+
+	for (i = 0; i < m; i++)
+		free(notSee[i]);
+	free(notSee);
+
+	for (i = 0; i < size; i++)
+		free(output[i]);
+	free(output);
+
+	return 0;
+}
