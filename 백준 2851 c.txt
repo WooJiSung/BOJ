@@ -1,0 +1,27 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+	int i, arr[10], sum = 0, sub = 0;
+	for (i = 0; i < 10; i++)
+		scanf("%d", &arr[i]);
+
+	for (i = 0; i < 10; i++)
+	{
+		sum += arr[i];
+
+		if (100 - sum <= 0)
+		{
+			if (sub < abs(100 - sum))	printf("%d", 100 - sub);
+			else						printf("%d", sum);
+			return 0;
+		}
+
+		sub = 100 - sum;
+	}
+
+	printf("%d", sum);
+	return 0;
+}
