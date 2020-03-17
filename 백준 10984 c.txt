@@ -1,0 +1,27 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int i, j, T, N, c, cSum;
+	float g, gSum;
+	scanf("%d", &T);
+
+	for (i = 0; i < T; i++)
+	{
+		cSum = 0;
+		gSum = 0.0;
+
+		scanf("%d", &N);
+		for (j = 0; j < N; j++)
+		{
+			scanf("%d %f", &c, &g);
+			cSum += c;
+			gSum += c * g;
+		}
+
+		printf("%d %.1f\n", cSum, (float)(gSum / cSum));
+	}
+
+	return 0;
+}
