@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void swap(char *c1, char *c2)
+{
+	char temp;
+
+	temp = *c1;
+	*c1 = *c2;
+	*c2 = temp;
+}
+
+int main()
+{
+	int a, b;
+	char A[4], B[4];
+	scanf("%s %s", A, B);
+
+	swap(&A[0], &A[2]);
+	swap(&B[0], &B[2]);
+
+	a = atoi(A);
+	b = atoi(B);
+
+	if (a > b) printf("%d", a);
+	else printf("%d", b);
+
+	return 0;
+}
