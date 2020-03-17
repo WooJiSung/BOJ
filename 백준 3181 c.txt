@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char str[101], ignore[10][101] = { "i", "pa", "te", "ni", "niti", "a", "ali", "nego", "no", "ili"};
+	char output[101], temp[101];
+	int i, j, index = 0, len, flag = 1, size = 0;
+	gets(str);
+	len = strlen(str);
+
+	strcpy(output, "");
+	for (i = 0; i <= len; i++)
+	{
+		if (str[i] == ' ' || str[i] == NULL)
+		{
+			if (flag == 1)
+				flag = 0;
+			
+			else
+			{
+				str[i] = NULL;
+				strcpy(temp, str + index);
+				for (j = 0; j < 10; j++)
+				{
+					if (!strcmp(temp, ignore[j]))
+						break;
+				}
+
+				if (j != 10)
+				{
+					index = i + 1;
+					continue;
+				}
+			}
+			
+			output[size++] = str[index] - 32;
+			index = i + 1;
+		}
+	}
+
+	for (i = 0; i < size; i++)
+		printf("%c", output[i]);
+
+	return 0;
+}
