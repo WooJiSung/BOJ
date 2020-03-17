@@ -1,0 +1,24 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int n, cent = 500, output = 0, i = 0;
+	scanf("%d", &n);
+
+	n = 1000 - n;
+	
+	while (n != 0)
+	{
+		output += n / cent;
+		n %= cent;
+		
+		if (i == 0) cent /= 5;
+		else		cent /= 2;
+		i = 1 - i;
+	}
+
+	printf("%d", output);
+
+	return 0;
+}
