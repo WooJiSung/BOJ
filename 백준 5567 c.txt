@@ -1,0 +1,94 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int num;
+	int visited;
+	int *vertex;
+}Node;
+
+Node *getNode(int num, int n)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->num = num;
+	newNode->visited = 0;
+	newNode->vertex = (int *)malloc(sizeof(int) * n);
+	for (int i = 0; i < n; i++)
+		newNode->vertex[i] = 0;
+
+	return newNode;
+}
+
+void insertIndex(Node *node, int num)
+{
+	int i = 0;
+
+	if (num == 1)
+		return;
+
+	while (1)
+	{
+		if (node->vertex[i] == 0)
+		{
+			node->vertex[i] = num;
+			return;
+		}
+		i++;
+	}
+}
+
+int main()
+{
+	Node **node;
+	int i, n, m, num[2], output = 0;
+	scanf("%d", &n);
+
+	node = (Node **)malloc(sizeof(Node) * (n + 1));
+	for (i = 1; i <= n; i++)
+		node[i] = getNode(i, n - 1);
+
+	scanf("%d", &m);
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d %d", &num[0], &num[1]);
+		insertIndex(node[num[0]], num[1]);
+		insertIndex(node[num[1]], num[0]);
+	}
+
+	i = 0;
+	while (i < n - 1)
+	{
+		if (node[1]->vertex[i] != 0)
+		{
+			output++;
+			node[node[1]->vertex[i]]->visited = 1;
+		}
+		i++;
+	
+	}
+
+	for (i = 2; i <= n; i++)
+	{
+		for (int j = 0; node[i]->vertex[j]; j++)
+		{
+			if (node[i]->visited == 1 && node[node[i]->vertex[j]]->visited == 0)
+			{
+				output++;
+				node[node[i]->vertex[j]]->visited = 2;
+			}
+		}
+	}
+
+	printf("%d", output);
+
+	for (i = 1; i <= n; i++)
+	{
+		free(node[i]->vertex);
+		free(node[i]);
+	}
+	free(node);
+
+	return 0;
+}
