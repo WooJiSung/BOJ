@@ -1,0 +1,51 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	int i, j, len[2], index[2], flag = 0;
+	char str[2][30];
+	scanf("%s %s", str[0], str[1]);
+
+	len[0] = strlen(str[0]);
+	len[1] = strlen(str[1]);
+	for (i = 0; i < len[0]; i++)
+	{
+		for (j = 0; j < len[1]; j++)
+		{
+			if (str[0][i] == str[1][j])
+			{
+				index[0] = i;
+				index[1] = j;
+				flag = 1;
+				break;
+			}
+		}
+
+		if (flag)
+			break;
+	}
+
+	for (i = 0; i < len[1]; i++)
+	{
+		if (i == index[1])
+		{
+			puts(str[0]);
+			continue;
+		}
+
+		for (j = 0; j < len[0]; j++)
+		{
+			if (j == index[0])
+			{
+				printf("%c", str[1][i]);
+				continue;
+			}
+			printf(".");
+		}
+		printf("\n");
+	}
+
+	return 0;
+}
