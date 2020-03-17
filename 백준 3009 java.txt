@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Main
+{	
+	static int func(int[] arr)
+	{
+		int index = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			if(arr[i % 3] == arr[(i+1) % 3])
+			{
+				index = (i+2) % 3;
+				break;
+			}
+		}
+		
+		return arr[index];
+	}
+	
+	public static void main(String[] args)
+	{	
+		Scanner sc = new Scanner(System.in);
+		
+		int[] x = new int[3];
+		int[] y = new int[3];
+		
+		for(int i = 0; i < 3; i++)
+		{
+			x[i] = sc.nextInt();
+			y[i] = sc.nextInt();
+		}
+		
+		System.out.println(func(x) + " " + func(y));
+	}
+}
