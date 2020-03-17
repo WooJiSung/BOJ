@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+	int i, j, C, N, *a, sum, per;
+	float avg;
+	scanf("%d", &C);
+	a = (int *)malloc(sizeof(int));
+
+	for (i = 0; i < C; i++)
+	{
+		per = 0;
+		sum = 0;
+		avg = 0.0;
+		scanf("%d", &N);
+		a = (int *)realloc(a, sizeof(int) * N);
+	
+		for (j = 0; j < N; j++)
+		{
+			scanf("%d", a + j);
+			sum += *(a + j);
+		}
+		avg = (float)sum / N;
+
+		for (j = 0; j < N; j++)
+		{
+			if (avg < *(a + j))
+				per++;
+		}
+		printf("%.3f%%\n", (float)per/N * 100);
+	}
+
+	free(a);
+	return 0;
+}
