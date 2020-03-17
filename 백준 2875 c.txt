@@ -1,0 +1,15 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int n, m, k, min;
+	scanf("%d %d %d", &n, &m, &k);
+
+	min = m;
+	if (min > n / 2) min = n / 2;
+	if (min > (n + m - k) / 3) min = (n + m - k) / 3;
+
+	printf("%d", min);
+	return 0;
+}
