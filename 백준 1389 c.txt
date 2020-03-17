@@ -1,0 +1,71 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+void function(int **matrix, int n)
+{
+	for (int i = 1; i <= n; i++)
+	{
+		for (int x = 1; x <= n; x++)
+		{
+			for (int y = 1; y <= n; y++)
+			{
+				if (x == y)
+					continue;
+
+				if (matrix[x][i] != 0 && matrix[i][y])
+				{
+					if (matrix[x][y] == 0)
+						matrix[x][y] = matrix[x][i] + matrix[i][y];
+
+					else if (matrix[x][y] > matrix[x][i] + matrix[i][y])
+						matrix[x][y] = matrix[x][i] + matrix[i][y];
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	int i, j, n, m, edge1, edge2, **matrix;
+	scanf("%d %d", &n, &m);
+
+	matrix = (int **)malloc(sizeof(int *) * (n + 1));
+	for (i = 1; i <= n; i++)
+	{
+		matrix[i] = (int *)malloc(sizeof(int) * (n + 1));
+		for (j = 1; j <= n; j++)
+			matrix[i][j] = 0;
+	}
+
+	for (j = 0; j < m; j++)
+	{
+		scanf("%d %d", &edge1, &edge2);
+		matrix[edge1][edge2] = 1;
+		matrix[edge2][edge1] = 1;
+	}
+
+	function(matrix, n);
+
+	int output, result = 10000, sum;
+	for (i = 1; i <= n; i++)
+	{
+		sum = 0;
+		for (j = 1; j <= n; j++)
+			sum += matrix[i][j];
+		if (result > sum)
+		{
+			result = sum;
+			output = i;
+		}
+	}
+
+	printf("%d", output);
+
+	for (i = 1; i <= n; i++)
+		free(matrix[i]);
+	free(matrix);
+
+	return 0;
+}
