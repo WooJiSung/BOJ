@@ -1,0 +1,59 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+int main()
+{
+	char ch, A[101], B[101];
+	scanf("%s\n%c\n%s", A, &ch, B);
+
+	if (ch == '*')
+	{
+		printf("1");
+		for (int i = 1; i < strlen(A) + strlen(B) - 1; i++)
+			printf("0");
+	}
+
+	if (ch == '+')
+	{
+		if (strlen(A) > strlen(B))
+		{
+			int i, index = (strlen(A) - strlen(B));
+			printf("1");
+			for (i = 1; i < strlen(A); i++)
+			{
+				if (i == index)
+				{
+					printf("1");
+					continue;
+				}
+				printf("0");
+			}
+		}
+
+		if (strlen(A) < strlen(B))
+		{
+			int i, index = (strlen(B) - strlen(A));
+			printf("1");
+			for (i = 1; i < strlen(B); i++)
+			{
+				if (i == index)
+				{
+					printf("1");
+					continue;
+				}
+				printf("0");
+			}
+		}
+
+		if (strlen(A) == strlen(B))
+		{
+			printf("2");
+			for (int i = 1; i < strlen(A); i++)
+				printf("0");
+		}
+	}
+
+	return 0;
+}
