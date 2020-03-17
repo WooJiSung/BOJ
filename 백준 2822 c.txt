@@ -1,0 +1,51 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int score;
+	int index;
+}Node;
+
+int comp1(const void *a, const void *b)
+{
+	Node *pa = (Node *)a;
+	Node *pb = (Node *)b;
+
+	if (pa->score > pb->score)	return 1;
+	if (pa->score < pb->score)	return -1;
+	return 0;
+}
+
+int comp2(const void *a, const void *b)
+{
+	Node *pa = (Node *)a;
+	Node *pb = (Node *)b;
+
+	if (pa->index > pb->index)	return 1;
+	if (pa->index < pb->index)	return -1;
+	return 0;
+}
+
+int main()
+{
+	Node node[8];
+	int i, sum = 0;
+	for (i = 0; i < 8; i++)
+	{
+		scanf("%d", &node[i].score);
+		node[i].index = i + 1;
+	}
+	qsort(node, 8, sizeof(Node), comp1);
+
+	for (i = 3; i < 8; i++)
+		sum += node[i].score;
+	printf("%d\n", sum);
+
+	qsort(node + 3, 5, sizeof(Node), comp2);
+	for (i = 3; i < 8; i++)
+		printf("%d ", node[i].index);
+
+	return 0;
+}
