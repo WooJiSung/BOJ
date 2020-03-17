@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main()
+{
+	int i, j, sum = 0;
+	char chess[8][9];
+
+	for (i = 0; i < 8; i++)
+	{
+		scanf("%s", chess[i]);
+		getchar();
+
+		for (j = 0; j < 4; j++)
+		{
+			if (chess[i][j * 2 + i % 2] == 'F')
+				sum++;
+		}
+	}
+
+	printf("%d", sum);
+	
+	return 0;
+}
