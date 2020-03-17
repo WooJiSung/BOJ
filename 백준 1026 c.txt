@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct ar
+{
+	int B;
+	int sortIndex;
+}Ar;
+
+int main()
+{
+	int i, j, k, temp, N, *A, sum = 0;
+	Ar *ar;
+	scanf("%d", &N);
+	A = (int *)malloc(sizeof(int) * N);
+	ar = (Ar *)malloc(sizeof(Ar) * N);
+
+	for (i = 0; i < N; i++)
+	{
+		scanf("%d", A + i);
+		for (j = 0; j < i; j++)
+		{
+			if (*(A + i) < *(A + j))
+			{
+				temp = *(A + i);
+				for (k = i - 1; k >= j; k--)
+					*(A + k + 1) = *(A + k);
+				
+				*(A + j) = temp;
+				break;
+			}
+		}
+	}
+	
+	for (i = 0; i < N; i++)
+	{
+		scanf("%d", &ar[i].B);
+		ar[i].sortIndex = 0;
+
+		for (j = 0; j < i; j++)
+		{
+			if (ar[i].B < ar[j].B)
+				ar[i].sortIndex++;
+			else
+				ar[j].sortIndex++;
+		}
+	}
+
+	for (i = 0; i < N; i++)
+		sum += (A[ar[i].sortIndex] * ar[i].B);
+	printf("%d", sum);
+
+	free(A);
+	free(ar);
+
+	return 0;
+}
