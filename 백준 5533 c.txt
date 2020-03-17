@@ -1,0 +1,35 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	int i, j, k, n, arr[200][3], score[200];
+	scanf("%d", &n);
+
+	for (i = 0; i < n; i++)
+	{
+		scanf("%d %d %d", &arr[i][0], &arr[i][1], &arr[i][2]);
+		score[i] = 0;
+	}
+
+	for (k = 0; k < 3; k++)
+	{
+		for (i = 0; i < n; i++)
+		{
+			for (j = 0; j < n; j++)
+			{
+				if (i == j) continue;
+				if (arr[i][k] == arr[j][k])
+					break;
+			}
+
+			if (j == n)
+				score[i] += arr[i][k];
+		}
+	}
+
+	for (i = 0; i < n; i++)
+		printf("%d\n", score[i]);
+	return 0;
+}
