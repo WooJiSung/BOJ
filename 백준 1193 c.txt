@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void func(int *index, int *max, int *status)
+{
+	(*index)++;
+	(*max)++;
+	*status = 1 - *status;
+}
+
+int main()
+{
+	int i = 1, j = 1, cnt = 1, X, max = 1, status = 0;
+	scanf("%d", &X);
+
+	while (cnt != X)
+	{
+		if (i == 1 && max == j && status == 0)
+			func(&j, &max, &status);
+
+		else if (j == 1 && max == i && status == 1)
+			func(&i, &max, &status);
+
+		else if (status == 0)
+		{
+			i--;
+			j++;
+		}
+		else if (status == 1)
+		{
+			i++;
+			j--;
+		}
+		cnt++;
+	}
+
+	printf("%d/%d", i, j);
+	return 0;
+}
