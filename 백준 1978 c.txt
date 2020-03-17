@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main()
+{
+	int i, j, N, num, output = 0, pri;
+	scanf("%d", &N);
+
+	for (i = 0; i < N; i++)
+	{
+		pri = 0;
+		scanf("%d", &num);
+
+		if (num == 2 || num == 3)
+			output++;
+		else
+		{
+			for (j = 3; j < num; j++)
+			{
+				if (num % j == 0 || num == 4)
+				{
+					pri = 0;
+					break;
+				}
+
+				pri = 1;
+			}
+
+			if (pri == 1)
+				output++;
+		}
+	}
+
+	printf("%d", output);
+
+	return 0;
+}
