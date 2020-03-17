@@ -1,0 +1,31 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	int i, len;
+	char str[101] = "", temp[101], output[101] = "", c;
+	gets(temp);
+
+	if (strlen(temp) % 3 == 1)
+		strcat(str, "00");
+	else if (strlen(temp) % 3 == 2)
+		strcat(str, "0");
+
+	strcat(str, temp);
+	len = strlen(str);
+
+	for (i = 0; i < len; i += 3)
+	{
+		c = 0;
+		c += (str[i] - '0') * 4;
+		c += (str[i + 1] - '0') * 2;
+		c += (str[i + 2] - '0') * 1;
+		output[i / 3] = c + '0';
+	}
+
+	puts(output);
+	
+	return 0;
+}
