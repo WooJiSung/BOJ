@@ -1,0 +1,78 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int x;
+	int y;
+	int data;
+	int length;
+}Node;
+
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, -1, 0, 1};
+int n, m;
+
+void BFS(Node **node, int i, int j)
+{
+	Node *queue = (Node *)malloc(sizeof(Node) * (n * m));
+	int front = 0, rear = 0;
+	node[i][j].length = 1;
+	queue[rear++] = node[i][j];
+
+	while (front != rear)
+	{
+		int x = queue[front].x;
+		int y = queue[front].y;
+		front++;
+
+		for (int j = 0; j < 4; j++)
+		{
+			int nx = x + dx[j];
+			int ny = y + dy[j];
+
+			if (nx >= 0 && ny >= 0 && nx < m && ny < n)
+			{
+				if (node[ny][nx].length == 0 && node[ny][nx].data == 1)
+				{
+					queue[rear++] = node[ny][nx];
+					node[ny][nx].length = node[y][x].length + 1;
+				}
+			}
+		}
+	}
+	free(queue);
+}
+
+int main()
+{
+	Node **node;
+	char temp[101];
+	int i, j;
+	scanf("%d %d", &n, &m);
+
+	node = (Node **)malloc(sizeof(Node *) * n);
+	for (i = 0; i < n; i++)
+	{
+		getchar();
+		scanf("%s", temp);
+		node[i] = (Node *)malloc(sizeof(Node) * m);
+		for (j = 0; j < m; j++)
+		{
+			node[i][j].x = j;
+			node[i][j].y = i;
+			node[i][j].data = temp[j] - '0';
+			node[i][j].length = 0;
+		}
+	}
+
+	BFS(node, 0, 0);
+	printf("%d", node[n - 1][m - 1].length);
+
+	for (i = 0; i < n; i++)
+		free(node[i]);
+	free(node);
+	
+	return 0;
+}
