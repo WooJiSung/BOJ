@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int i, N, K, *arr, output = 0;
+	scanf("%d %d", &N, &K);
+
+	arr = (int *)malloc(sizeof(int) * N);
+
+	for (i = 0; i < N; i++)
+		scanf("%d", arr + i);
+
+	for (i = N - 1; i >= 0; i--)
+	{
+		if (K / arr[i] == 0)
+			continue;
+
+		output += (K / arr[i]);
+		K %= arr[i];
+	}
+
+	printf("%d", output);
+	free(arr);
+
+	return 0;
+}
