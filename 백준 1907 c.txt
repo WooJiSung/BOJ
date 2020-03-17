@@ -1,0 +1,75 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+typedef struct
+{
+	int c;
+	int h;
+	int o;
+}Node;
+
+void function(int *num, char *str, char ch, int *i)
+{
+	if (*str == ch)
+	{
+		if (*(str + 1) >= '2' && *(str + 1) <= '9')
+		{
+			(*num) += *(str + 1) - '0';
+			(*i)++;
+		}
+		else
+			(*num)++;
+	}
+}
+
+int check(Node node[3], int i, int j, int k)
+{
+	if (node[0].c * i + node[1].c * j == node[2].c * k &&
+		node[0].h * i + node[1].h * j == node[2].h * k &&
+		node[0].o * i + node[1].o * j == node[2].o * k)
+		return 1;
+	return 0;
+}
+
+int main()
+{
+	Node node[3];
+	char str[51];
+	int i, j, k, index = 0, len;
+
+	scanf("%s", str);
+	len = strlen(str);
+
+	for (i = 0; i < 3; i++)
+	{
+		node[i].c = 0;
+		node[i].h = 0;
+		node[i].o = 0;
+	}
+
+	for (i = 0; i < len; i++)
+	{
+		function(&node[index].c, &str[i], 'C', &i);
+		function(&node[index].h, &str[i], 'H', &i);
+		function(&node[index].o, &str[i], 'O', &i);
+
+		if (str[i] == '+' || str[i] == '=')
+			index++;
+	}
+
+	for (i = 1; i <= 10; i++)
+	{
+		for (j = 1; j <= 10; j++)
+		{
+			for (k = 1; k <= 10; k++)
+			{
+				if (check(node, i, j, k))
+				{
+					printf("%d %d %d", i, j, k);
+					return 0;
+				}
+			}
+		}
+	}
+}
