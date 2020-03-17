@@ -1,0 +1,50 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int r, c, output = -1;
+
+void function(int **arr, int x, int y, int n)
+{
+	if (n != 2)
+	{
+		function(arr, x, y, n / 2);
+		function(arr, x + n / 2, y, n / 2);
+		function(arr, x, y + n / 2, n / 2);
+		function(arr, x + n / 2, y + n / 2, n / 2);
+	}
+	
+	else
+	{
+		for (int i = y; i < y + n; i++)
+		{
+			for (int j = x; j < x + n; j++)
+			{
+				output++;
+				if (i == r && j == c)
+				{
+					printf("%d", output);
+					exit(0);
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	int i, n, **arr;
+	scanf("%d %d %d", &n, &r, &c);
+	
+	arr = (int **)malloc(sizeof(int *) * ((int)pow(2, n)));
+	for (i = 0; i < n; i++)
+		arr[i] = (int *)malloc(sizeof(int) * ((int)pow(2, n)));
+
+	function(arr, 0, 0, (int)pow(2, n));
+
+	for (i = 0; i < n; i++)
+		free(arr[i]);
+	free(arr);
+	return 0;
+}
