@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+	int i, N, max = -INFINITY;
+	float *a, sum = 0.0;
+	scanf("%d", &N);
+	a = (float *)malloc(sizeof(float) * N);
+
+	for (i = 0; i < N; i++)
+	{
+		scanf("%f", a+i);
+		if (max < *(a + i))
+			max = *(a + i);
+	}
+	
+	for (i = 0; i < N; i++)
+	{
+		a[i] /= max;
+		a[i] *= 100;
+		sum += a[i];
+	}
+
+	printf("%f", sum/N);
+
+	free(a);
+	return 0;
+}
