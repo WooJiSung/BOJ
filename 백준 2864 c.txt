@@ -1,0 +1,38 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+void function(char *str, int *min, int *max)
+{
+	int i = strlen(str) - 1, mul = 1;
+	while (i != -1)
+	{
+		if (str[i] == '5' || str[i] == '6')
+		{
+			(*min) += 5 * mul;
+			(*max) += 6 * mul;
+		}
+
+		else
+		{
+			(*min) += (str[i] - '0') * mul;
+			(*max) += (str[i] - '0') * mul;
+		}
+		mul *= 10;
+		i--;
+	}
+}
+
+int main()
+{
+	int aMin = 0, aMax = 0, bMin = 0, bMax = 0;
+	char a[8], b[8];
+	scanf("%s %s", a, b);
+
+	function(a, &aMin, &aMax);
+	function(b, &bMin, &bMax);
+
+	printf("%d %d", aMin + bMin, aMax + bMax);
+
+	return 0;
+}
