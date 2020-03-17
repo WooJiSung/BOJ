@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Queue
+{
+	int data;
+	struct Queue *prev;
+	struct Queue *next;
+}Queue;
+
+Queue *getQueue(int data)
+{
+	Queue *newQueue = (Queue *)malloc(sizeof(Queue));
+	newQueue->data = data;
+	newQueue->prev = NULL;
+	newQueue->next = NULL;
+
+	return newQueue;
+}
+
+int isPush(char *str, int *num)
+{
+	char ch[4] = { 'p', 'u', 's', 'h' };
+	for (int i = 0; i < 4; i++)
+	{
+		if (str[i] != ch[i])
+			return 0;
+	}
+
+	*num = (int)(atoi(str + 5));
+
+	return 1;
+}
+
+void push(Queue *tail, int num)
+{
+	Queue *newQueue = getQueue(num);
+
+	newQueue->prev = tail->prev;
+	newQueue->next = tail;
+
+	tail->prev->next = newQueue;
+	tail->prev = newQueue;
+}
+
+void pop(Queue *head)
+{
+	if (head->next->data == 0)
+	{
+		printf("-1\n");
+		return;
+	}
+
+	printf("%d\n", head->next->data);
+	
+	Queue *temp = head->next;
+	head->next = temp->next;
+	temp->next->prev = head;
+	free(temp);
+}
+
+void size(Queue *queue)
+{
+	int size = 0;
+	Queue *temp = queue;
+
+	while (temp->data != 0)
+	{
+		size++;
+		temp = temp->next;
+	}
+
+	printf("%d\n", size);
+}
+
+void empty(Queue *head, Queue *tail)
+{
+	if (head->next == tail)
+	{
+		printf("1\n");
+		return;
+	}
+
+	printf("0\n");
+}
+
+void output(Queue *queue)
+{
+	if (queue->data == 0)
+	{
+		printf("-1\n");
+		return;
+	}
+
+	printf("%d\n", queue->data);
+}
+
+
+int main()
+{
+	Queue *head = getQueue(0), *tail = getQueue(0);
+	char str[12];
+	int i, n, num;
+	scanf("%d", &n);
+
+	head->next = tail;
+	tail->prev = head;
+	getchar();
+	for (i = 0; i < n; i++)
+	{
+		gets(str);
+
+		if (isPush(str, &num))		push(tail, num);
+		if (!strcmp(str, "pop"))	pop(head);
+		if (!strcmp(str, "size"))	size(head->next);
+		if (!strcmp(str, "empty"))	empty(head, tail);
+		if (!strcmp(str, "front"))	output(head->next);
+		if (!strcmp(str, "back"))	output(tail->prev);
+	}
+
+	return 0;
+}
