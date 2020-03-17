@@ -1,0 +1,17 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int i, n, w, h, arr[50];
+	scanf("%d %d %d", &n, &w, &h);
+
+	for (i = 0; i < n; i++)
+	{
+		scanf("%d", &arr[i]);
+		
+		if (arr[i] * arr[i] <= w * w + h * h)	printf("DA\n");
+		else									printf("NE\n");
+	}
+	return 0;
+}
