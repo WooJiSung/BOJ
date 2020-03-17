@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main()
+{
+	int i, j, N, number, cnt, sub = -1, output = 0;
+	scanf("%d", &N);
+
+	for (i = 1; i <= N; i++)
+	{
+		cnt = 0;
+		number = i;
+		while (number != 0)
+		{
+			cnt++;
+			number /= 10;
+		}
+
+		number = i;
+		sub = number % 10 - (number / 10) % 10;
+		for (j = 1; j < cnt; j++)
+		{
+			if (sub != number % 10 - (number / 10) % 10)
+			{
+				sub = 10;
+				break;
+			}
+			number /= 10;
+		}
+
+		if (sub != 10)
+			output++;	}
+
+	printf("%d", output);
+
+	return 0;
+}
