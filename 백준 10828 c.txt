@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <string.h> 
+#include <stdlib.h>
+
+int isPush(char *str, int *num)
+{
+	char same[4] = {'p', 'u', 's', 'h'};
+	int i;
+
+	for (i = 0; i < 4; i++)
+	{
+		if (*(str + i) == same[i])
+			continue;
+		else
+			return 0;
+	}
+	*num = (int)(atoi(str + 5));
+
+	return 1;
+}
+
+void push(int *stack, int *top, int num)
+{
+	(*top)++;
+	*(stack + *top) = num;
+}
+
+int pop(int *stack, int *top)
+{
+	if (*top == -1)
+		return -1;
+		
+	int popNumber = *(stack + *top);
+	(*top)--;
+	return popNumber;
+}
+
+int isEmpty(int top)
+{
+	if (top == -1)
+		return 1;
+	return 0;
+}
+
+int topNumber(int *stack, int top)
+{
+	if (top == -1)
+		return -1;
+	return *(stack + top);
+}
+
+int main()
+{
+	char str[12];
+	int i, N, *stack, num, top;
+	stack = (int *)malloc(sizeof(int) * 10000);
+	scanf("%d", &N);
+	getchar();
+
+	top = -1;
+	for (i = 0; i < N; i++)
+	{
+		gets(str);
+		if (isPush(str, &num))		push(stack, &top, num);
+		if (!strcmp(str, "pop"))	printf("%d\n", pop(stack, &top));
+		if (!strcmp(str, "size"))	printf("%d\n", top+1);
+		if (!strcmp(str, "empty"))	printf("%d\n", isEmpty(top));
+		if (!strcmp(str, "top"))	printf("%d\n", topNumber(stack, top));
+	}
+
+	free(stack);
+	return 0;
+}
