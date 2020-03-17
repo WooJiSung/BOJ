@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+int main()
+{
+	int N, output = 0, A = 0, B = 0, a, b;
+	scanf("%d", &N);
+	a = N / 10;
+	b = N % 10;
+
+	while (1)
+	{
+		if (output > 1 && A == a && B == b)
+			break;
+
+		A = N / 10;
+		B = N % 10;
+		N = B * 10 + (A + B) % 10;
+
+		output++;
+	}
+
+	printf("%d", output-1);
+	return 0;
+}
