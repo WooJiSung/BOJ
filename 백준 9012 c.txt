@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void push(char *stack, int *top, char c)
+{
+	*(stack + *(top)) = c;
+	(*top)++;
+}
+
+int pop(char *stack, int *top)
+{
+	if ((*top) <= 0)
+		return 0;
+	
+	else
+	{
+		(*top)--;
+		return 1;
+	}
+}
+
+void func(char *str)
+{
+	char *stack;
+	int i, top = 0, status;
+	stack = (char *)malloc(sizeof(char) * strlen(str));
+
+	for (i = 0; i < strlen(str); i++)
+	{
+		if (str[i] == '(')
+			push(stack, &top, str[i]);
+		else
+		{
+			status = pop(stack, &top);
+			if (status == 0)
+			{
+				printf("NO\n");
+				return;
+			}
+		}
+	}
+
+	if(top != 0)
+		printf("NO\n");
+	else
+		printf("YES\n");
+	
+	free(stack);
+	return;
+}
+
+int main()
+{
+	char str[51];
+	int i, N;
+	scanf("%d", &N);
+
+	for (i = 0; i < N; i++)
+	{
+		scanf("%s", str);
+		getchar();
+		func(str);
+	}
+
+	return 0;
+}
