@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int data;
+	struct node *prev;
+	struct node *next;
+}Node;
+
+Node *getNode(int data)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->data = data;
+	newNode->prev = NULL;
+	newNode->next = NULL;
+
+	return newNode;
+}
+
+void addQueue(Node *tail, int data)
+{
+	Node *newNode = getNode(data);
+
+	newNode->next = tail;
+	newNode->prev = tail->prev;
+
+	(tail->prev)->next = newNode;
+	tail->prev = newNode;
+}
+
+void function(Node *head, Node *tail)
+{
+	Node *trash = head->next, *access = head->next->next;
+
+	head->next = access->next;
+	access->next->prev = head;
+
+	access->next = tail;
+	access->prev = tail->prev;
+
+	tail->prev->next = access;
+	tail->prev = access;
+
+	free(trash);
+}
+
+int main()
+{
+	int i, N;
+	Node *head = getNode(0), *tail = getNode(0);
+
+	scanf("%d", &N);
+	head->next = tail;
+	tail->prev = head;
+
+	for (i = 0; i < N; i++)
+		addQueue(tail, i+1);
+
+	while (head->next->next != tail)
+		function(head, tail);
+
+	printf("%d", head->next->data);
+
+	free(head->next);
+	free(head);
+	free(tail);
+
+	return 0;
+}
