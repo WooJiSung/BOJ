@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	char *name;
+	int num;
+	struct node *next;
+}Node;
+
+Node *getNode(char *book, int len)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->name = (char *)malloc(sizeof(char) * len);
+	strcpy(newNode->name, book);
+	newNode->num = 1;
+	newNode->next = NULL;
+
+	return newNode;
+}
+
+int main()
+{
+	Node **node, *temp, *output;
+	char *book = (char *)malloc(sizeof(char) * 51);
+	int i, j = 0, N, maxNum = 1;
+
+	scanf("%d", &N);
+	node = (Node **)malloc(sizeof(Node *) * N);
+
+	for (i = 0; i < N; i++)
+	{
+		getchar();
+		scanf("%s", book);
+		node[i] = NULL;
+
+		for (j = 0; j < i; j++)
+		{
+			if (node[j] == NULL)
+				continue;
+			if (!strcmp(node[j]->name, book))
+			{
+				node[j]->num += 1;
+				if (maxNum < node[j]->num)
+					maxNum = node[j]->num;
+				break;
+			}
+		}
+
+		if (i == j)
+		{
+			node[i] = getNode(book, strlen(book) + 1);
+			if (i == 0)
+				temp = node[i];
+			else
+			{
+				temp->next = node[i];
+				temp = temp->next;
+			}
+		}
+	}
+
+	temp = node[0];
+	output = node[0];
+	while (temp != NULL)
+	{
+		if (maxNum == temp->num && output->num < temp->num)
+			output = temp;
+		if (maxNum == temp->num && output->num == temp->num)
+		{
+			if (strcmp(output->name, temp->name) > 0)
+				output = temp;
+		}
+		temp = temp->next;
+	}
+
+	printf("%s", output->name);
+
+	for (i = 0; i < N; i++)
+	{
+		if (node[i] == NULL)
+			continue;
+		free(node[i]->name);
+		free(node[i]);
+	}
+	free(node);
+
+	return 0;
+}
