@@ -1,0 +1,68 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int data;
+	int visited;
+	int *edge;
+	int size;
+}Node;
+
+Node *getNode(int data, int n)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->data = data;
+	newNode->visited = 0;
+	newNode->edge = (int *)malloc(sizeof(int) * n);
+	newNode->size = 0;
+
+	return newNode;
+}
+
+int DFS(Node **node, int i)
+{
+	if (node[i]->visited == 1)
+		return 0;
+
+	node[i]->visited = 1;
+	for (int j = 0; j < node[i]->size; j++)
+		DFS(node, node[i]->edge[j]);
+
+	return 1;
+}
+
+int main()
+{
+	Node **node;
+	int i, n, m, num[2], output = 0;
+	scanf("%d %d", &n, &m);
+
+	node = (Node **)malloc(sizeof(Node *) * (n + 1));
+	for (i = 1; i <= n; i++)
+		node[i] = getNode(i, n - 1);
+
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d %d", &num[0], &num[1]);
+		node[num[0]]->edge[ (node[num[0]]->size)++ ] = num[1];
+		node[num[1]]->edge[ (node[num[1]]->size)++ ] = num[0];
+	}
+
+	for (i = 1; i <= n; i++)
+	{
+		int value = DFS(node, i);
+		if (value == 1)	output++;
+	}
+	printf("%d", output);
+
+	for (i = 1; i <= n; i++)
+	{
+		free(node[i]->edge);
+		free(node[i]);
+	}
+	free(node);
+
+	return 0;
+}
