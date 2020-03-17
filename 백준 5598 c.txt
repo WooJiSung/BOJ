@@ -1,0 +1,19 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char str[1001];
+	scanf("%s", str);
+
+	int i, len = strlen(str);
+	for (i = 0; i < len; i++)
+	{
+		if (str[i] - 3 < 'A')
+			str[i] += 26;
+		printf("%c", str[i] - 3);
+	}
+
+	return 0;
+}
