@@ -1,0 +1,185 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Deque
+{
+	int data;
+	struct Deque *prev;
+	struct Deque *next;
+}Deque;
+
+Deque *getDeque(int data)
+{
+	Deque *newDeque = (Deque *)malloc(sizeof(Deque));
+	newDeque->data = data;
+	newDeque->prev = NULL;
+	newDeque->next = NULL;
+
+	return newDeque;
+}
+
+int isPush(char *str)
+{
+	char same[4] = { 'p', 'u', 's', 'h' };
+	for (int i = 0; i < 4; i++)
+	{
+		if (str[i] != same[i])
+			return 0;
+	}
+
+	switch (str[5])
+	{
+	case 'f': return 1;
+	case 'b': return 2;
+	default:  return 0;
+	}
+}
+
+int isPop(char *str)
+{
+	char same[3] = { 'p', 'o', 'p' };
+	for (int i = 0; i < 3; i++)
+	{
+		if (str[i] != same[i])
+			return 0;
+	}
+
+	switch (str[4])
+	{
+	case 'f': return 1;
+	case 'b': return 2;
+	default:  return 0;
+	}
+}
+
+void push_front(Deque *head, int data)
+{
+	Deque *newDeque = getDeque(data);
+	
+	newDeque->prev = head;
+	newDeque->next = head->next;
+
+	head->next->prev = newDeque;
+	head->next = newDeque;
+}
+
+void push_back(Deque *tail, int data)
+{
+	Deque *newDeque = getDeque(data);
+
+	newDeque->prev = tail->prev;
+	newDeque->next = tail;
+
+	tail->prev->next = newDeque;
+	tail->prev = newDeque;
+}
+
+void pop_front(Deque *head)
+{
+	if (head->next->data == 0)
+	{
+		printf("-1\n");
+		return;
+	}
+
+	Deque *temp = head->next;
+	printf("%d\n", temp->data);
+
+	head->next = temp->next;
+	temp->next->prev = head;
+	
+	free(temp);
+}
+
+void pop_back(Deque *tail)
+{
+	if (tail->prev->data == 0)
+	{
+		printf("-1\n");
+		return;
+	}
+
+	Deque *temp = tail->prev;
+	printf("%d\n", temp->data);
+
+	tail->prev = temp->prev;
+	temp->prev->next = tail;
+
+
+	free(temp);
+}
+
+void size(Deque *deque)
+{
+	int output = 0;
+	Deque *temp = deque;
+
+	while (temp->data != 0)
+	{
+		output++;
+		temp = temp->next;
+	}
+	printf("%d\n", output);
+}
+
+void empty(Deque *head, Deque *tail)
+{
+	if (head->next == tail)
+	{
+		printf("1\n");
+		return;
+	}
+	printf("0\n");
+}
+
+void data(Deque *deque)
+{
+	if (deque->data == 0)
+	{
+		printf("-1\n");
+		return;
+	}
+	printf("%d\n", deque->data);
+}
+
+int main()
+{
+	char str[17];
+	int i, n;
+	Deque *head, *tail;
+	
+	head = getDeque(0);
+	tail = getDeque(0);
+	head->next = tail;
+	tail->prev = head;
+
+	scanf("%d", &n);
+	getchar();
+
+	for (i = 0; i < n; i++)
+	{
+		gets(str);
+
+		switch (isPush(str))
+		{
+		case 1:  push_front(head, atoi(str + 11)); break;
+		case 2:  push_back(tail, atoi(str + 10));  break;
+		default: break;
+		}
+
+		switch (isPop(str))
+		{
+		case 1:  pop_front(head);  break;
+		case 2:  pop_back(tail);   break;
+		default: break;
+		}
+
+		if (!strcmp(str, "size"))	size(head->next);
+		if (!strcmp(str, "empty"))	empty(head, tail);
+		if (!strcmp(str, "front"))	data(head->next);
+		if (!strcmp(str, "back"))	data(tail->prev);
+	}
+
+	return 0;
+}
