@@ -1,0 +1,102 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int x;
+	int y;
+	int length;
+}Node;
+
+int dx[8] = {-2, -1, 1, 2,  2,  1, -1, -2};
+int dy[8] = { 1,  2, 2, 1, -1, -2, -2, -1};
+
+void nodeSetting(Node *node, int i, int j)
+{
+	node->y = i;
+	node->x = j;
+	node->length = 0;
+}
+
+void BFS(Node **node, Node *start, Node *end, int chess)
+{
+	Node *queue = (Node *)malloc(sizeof(Node) * (chess * chess));
+	int front = 0, rear = 0;
+
+	queue[rear++] = node[start->y][start->x];
+	while (front != rear)
+	{
+		int x = queue[front].x;
+		int y = queue[front].y;
+		front++;
+
+		for (int i = 0; i < 8; i++)
+		{
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+
+			if (nx >= 0 && ny >= 0 && nx < chess && ny < chess)
+			{
+				if (node[ny][nx].length == 0)
+				{
+					queue[rear++] = node[ny][nx];
+					node[ny][nx].length = node[y][x].length + 1;
+
+					if (queue[rear - 1].x == end->x && queue[rear - 1].y == end->y)
+					{
+						free(queue);
+						return;
+					}
+				}
+
+				else
+				{
+					if (node[ny][nx].length > node[y][x].length + 1)
+						node[ny][nx].length = node[y][x].length + 1;
+				}
+			}
+		}
+	}
+
+	free(queue);
+}
+
+int main()
+{
+	Node **node, *start, *end;
+	int i, j, k, test_case, chess;
+	scanf("%d", &test_case);
+
+	for (i = 0; i < test_case; i++)
+	{
+		scanf("%d", &chess);
+		node = (Node **)malloc(sizeof(Node *) * chess);
+		for (j = 0; j < chess; j++)
+		{
+			node[j] = (Node *)malloc(sizeof(Node) * chess);
+			for (k = 0; k < chess; k++)
+				nodeSetting(&node[j][k], j, k);
+		}
+
+		start = (Node *)malloc(sizeof(Node));
+		end   = (Node *)malloc(sizeof(Node));
+		scanf("%d %d", &start->x, &start->y);
+		scanf("%d %d", &end->x, &end->y);
+
+		if (start->x == end->x && start->y == end->y)
+		{
+			printf("0\n");
+			continue;
+		}
+
+		BFS(node, start, end, chess);
+		printf("%d\n", node[end->y][end->x].length);
+
+		for (j = 0; j < chess; j++)
+			free(node[j]);
+		free(node);
+	}
+
+	return 0;
+}
