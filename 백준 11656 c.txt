@@ -1,0 +1,41 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	int i, j, k, len;
+	char str[1001], **word;
+	scanf("%s", str);
+
+	len = strlen(str);
+	word = (char **)malloc(sizeof(char *) * len);
+
+	for (i = 0; i < len; i++)
+	{
+		word[i] = (char *)malloc(sizeof(char) * (len + 1));
+		strcpy(word[i], str + i);
+
+		for (j = 0; j < i; j++)
+		{
+			if (strcmp(word[i], word[j]) < 0)
+			{
+				char temp[1001];
+				strcpy(temp, word[i]);
+				for (k = i; k > j; k--)
+					strcpy(word[k], word[k - 1]);
+				strcpy(word[j], temp);
+				break;
+			}
+		}
+	}
+
+	for (i = 0; i < len; i++)
+	{
+		puts(word[i]);
+		free(word[i]);
+	}
+	free(word);
+	return 0;
+}
