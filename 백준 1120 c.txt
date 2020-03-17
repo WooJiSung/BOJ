@@ -1,0 +1,35 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+void function(char *a, char *b, int start, int end, int *min)
+{
+	int i, output = 0;
+	for (i = start; i < end; i++)
+	{
+		if (a[i - start] != b[i])
+			output++;
+	}
+
+	if (*min > output)
+		*min = output;
+}
+
+int main()
+{
+	int i, index, alen, blen, min = 50;
+	char a[51], b[51];
+	scanf("%s %s", a, b);
+	getchar();
+
+	alen = strlen(a);
+	blen = strlen(b);
+	index = blen - alen;
+
+	for (i = 0; i <= index; i++)
+		function(a, b, i, alen + i, &min);
+
+	printf("%d", min);
+
+	return 0;
+}
