@@ -1,0 +1,16 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int A, B, C, D, P, X, Y;
+	scanf("%d\n%d\n%d\n%d\n%d", &A, &B, &C, &D, &P);
+
+	X = A * P;
+	Y = B;
+	if(P > C) Y += (P - C) * D;
+
+	(X < Y) ? printf("%d", X) : printf("%d", Y);
+
+	return 0;
+}
