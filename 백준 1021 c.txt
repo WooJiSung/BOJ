@@ -1,0 +1,145 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Queue
+{
+	int data;
+	struct Queue *prev;
+	struct Queue *next;
+}que;
+
+que *getQueue(int num)
+{
+	que *newQueue = (que *)malloc(sizeof(que));
+	newQueue->data = num;
+	newQueue->prev = NULL;
+	newQueue->next = NULL;
+	return newQueue;
+}
+
+void push(que *head, que *tail, int num)
+{
+	que *newQueue = getQueue(num);
+	que *temp = head;
+
+	while (temp->next != tail)
+		temp = temp->next;
+
+	temp->next = newQueue;
+	tail->prev = newQueue;
+	newQueue->prev = temp;
+	newQueue->next = tail;
+}
+
+void pop(que *head)
+{
+	que *temp = head->next;
+	head->next = temp->next;
+	(temp->next)->prev = head;
+	free(temp);
+}
+
+void leftShift(que *head, que *tail, int data, int *output)
+{
+	if (head->next->data == data)
+	{
+		pop(head);
+		return;
+	}
+
+	que *temp = head->next;
+	head->next = temp->next;
+	(temp->next)->prev = head;
+
+	temp->prev = tail->prev;
+	temp->next = tail;
+
+	(tail->prev)->next = temp;
+	tail->prev = temp;
+
+	(*output)++;
+
+	leftShift(head, tail, data, output);
+}
+
+void rightShift(que *head, que *tail, int data, int *output)
+{
+	if (head->next->data == data)
+	{
+		pop(head);
+		return;
+	}
+
+	que *temp = tail->prev;
+	tail->prev = temp->prev;
+	(tail->prev)->next = tail;
+
+	temp->prev = head;
+	temp->next = head->next;
+
+	(head->next)->prev = temp;
+	head->next = temp;
+
+	(*output)++;
+
+	rightShift(head, tail, data, output);
+}
+
+int direction(que *head, que *tail, int data)
+{
+	int h = 0, t = 1;
+
+	que *inspection = head->next;
+	while (inspection->data != data)
+	{
+		inspection = inspection->next;
+		h++;
+	}
+
+	inspection = tail->prev;
+	while (inspection->data != data)
+	{
+		inspection = inspection->prev;
+		t++;
+	}
+
+	if (h < t)  return 1;
+	else		return 0;
+}
+
+int main()
+{
+	que *head = getQueue(0), *tail = getQueue(0);
+	head->prev = tail;
+	head->next = tail;
+	tail->prev = head;
+	tail->next = head;
+
+	int i, n, m, findData, output = 0;
+	scanf("%d %d", &n, &m);
+
+	for (i = 1; i <= n; i++)
+		push(head, tail, i);
+
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d", &findData);
+		int dir = direction(head, tail, findData);
+		if(dir)		 leftShift(head, tail, findData, &output);
+		else		rightShift(head, tail, findData, &output);
+	}
+
+	printf("%d", output);
+    
+    que *temp = head, *del;
+    while(temp != tail)
+    {
+        del = temp;
+        temp = temp->next;
+        free(del);
+    }
+    free(tail);
+    
+	return 0;
+}
