@@ -1,0 +1,116 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct
+{
+	int x;
+	int y;
+	char data;
+	int visited;
+}Node;
+
+int check(Node node)
+{
+	if (node.data != '#' && node.visited == 0)
+		return 1;
+	return 0;
+}
+
+int wolf, sheep;
+int v = 0, o = 0;
+
+void BFS(Node **node, int i, int j, int r, int c)
+{
+	Node *queue = (Node *)malloc(sizeof(Node) * (r * c));
+	int front = 0, rear = 0;
+	int dx[4] = { -1, 0, 1, 0 };
+	int dy[4] = {  0,-1, 0, 1 };
+
+	queue[rear++] = node[i][j];
+	node[i][j].visited = 1;
+	wolf = 0;
+	sheep = 0;
+
+	while (front != rear)
+	{
+		int x = queue[front].x;
+		int y = queue[front].y;
+
+		if (queue[front].data == 'v')	wolf++; 
+		if (queue[front].data == 'o')	sheep++;
+		front++;
+
+		for (int k = 0; k < 4; k++)
+		{
+			int sideX = x + dx[k];
+			int sideY = y + dy[k];
+
+			if (sideX >= 0 && sideY >= 0 && sideX < c && sideY < r)
+			{
+				if (check(node[sideY][sideX]))
+				{
+					queue[rear++] = node[sideY][sideX];
+					node[sideY][sideX].visited = 1;
+				}
+			}
+		}
+	}
+
+	if (wolf >= sheep)	v += wolf;
+	else				o += sheep;
+
+	free(queue);
+}
+
+void Search(Node **node, int i, int j, int r, int c)
+{
+	if (i == r)
+		return;
+
+	if (j == c)
+	{
+		Search(node, i + 1, 0, r, c);
+		return;
+	}
+
+	if (1 - check(node[i][j]))
+	{
+		Search(node, i, j + 1, r, c);
+		return;
+	}
+
+	BFS(node, i, j, r, c);
+	Search(node, i, j + 1, r, c);
+}
+
+int main()
+{
+	Node **node;
+	int i, j, r, c;
+	scanf("%d %d", &r, &c);
+
+	node = (Node **)malloc(sizeof(Node *) * r);
+	for (i = 0; i < r; i++)
+	{
+		getchar();
+		node[i] = (Node *)malloc(sizeof(Node) * c);
+		for (j = 0; j < c; j++)
+		{
+			scanf("%1c", &node[i][j].data);;
+			node[i][j].visited = 0;
+			node[i][j].y = i;
+			node[i][j].x = j;
+		}
+	}
+
+	Search(node, 0, 0, r, c);
+	printf("%d %d", o, v);
+
+	for (i = 0; i < r; i++)
+		free(node[i]);
+	free(node);
+
+	return 0;
+}
