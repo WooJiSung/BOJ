@@ -1,0 +1,35 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int i, j, k, n, white[100][100], black[2], sum = 0;
+	scanf("%d", &n);
+
+	for (i = 0; i < 100; i++)
+	{
+		for (j = 0; j < 100; j++)
+			white[i][j] = 1;
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		scanf("%d %d", &black[0], &black[1]);
+
+		for (j = black[1]; j < black[1] + 10; j++)
+		{
+			for (k = black[0]; k < black[0] + 10; k++)
+			{
+				if (white[j][k] == 1)
+				{
+					white[j][k] = 0;
+					sum++;
+				}
+			}
+		}
+	}
+
+	printf("%d", sum);
+
+	return 0;
+}
