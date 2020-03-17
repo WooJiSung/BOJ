@@ -1,0 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	int i, flag = 0, pointer = 0, sum = 0;
+	char str[51];
+	scanf("%s", str);
+	
+	for (i = 0; i <= strlen(str); i++)
+	{
+		if (str[i] != '-' && str[i] != '+' && i != strlen(str))
+			continue;
+
+		int temp = atoi(str + pointer);
+		if (flag == 1 && temp > 0)
+			temp *= -1;
+
+		sum += temp;
+		pointer = i;
+
+		if (str[i] == '-')
+			flag = 1;
+	}
+	printf("%d\n", sum);
+
+	return 0;
+}
