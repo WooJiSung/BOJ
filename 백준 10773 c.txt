@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void push(int *stack, int *top, int data)
+{
+	*(stack + (*top)) = data;
+	(*top)++;
+}
+
+void pop(int *stack, int *top)
+{
+	(*top)--;
+}
+
+int main()
+{
+	int i, N, data, *stack, top = 0, output = 0;
+	scanf("%d", &N);
+	stack = (int *)malloc(sizeof(int) * N);
+
+	for (i = 0; i < N; i++)
+	{
+		scanf("%d", &data);
+
+		if (data != 0)
+			push(stack, &top, data);
+		else
+			pop(stack, &top);
+	}
+
+	for (i = 0; i < top; i++)
+		output += *(stack + i);
+
+	printf("%d", output);
+
+	free(stack);
+	return 0;
+}
