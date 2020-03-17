@@ -1,0 +1,106 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	char color;
+	int visited;
+}Node;
+
+int n, output = 0, flag = 0;
+char data;
+
+int check(Node node)
+{
+	if (node.visited == 0)
+	{
+		if (flag == 0 && data == node.color)
+			return 1;
+
+		else if (flag == 1)
+		{
+			if (data == node.color)					return 1;
+			if (data == 'G' && node.color == 'R')	return 1;
+			if (data == 'R' && node.color == 'G')	return 1;
+		}
+	}
+
+	return 0;
+}
+
+void DFS(Node **node, int i, int j)
+{
+	node[i][j].visited = 1;
+
+	if (i > 0 && check(node[i - 1][j]))		DFS(node, i - 1, j);
+	if (j > 0 && check(node[i][j - 1]))		DFS(node, i, j - 1);
+	if (i < n - 1 && check(node[i + 1][j]))	DFS(node, i + 1, j);
+	if (j < n - 1 && check(node[i][j + 1]))	DFS(node, i, j + 1);
+}
+
+void Search(Node **node, int i, int j)
+{
+	if (i < n && node[i][j].visited == 0)
+		data = node[i][j].color;
+
+	if (i == n)
+		return;
+
+	if (j == n)
+	{
+		Search(node, i + 1, 0);
+		return;
+	}
+
+	if (1 - check(node[i][j]))
+	{
+		Search(node, i, j + 1);
+		return;
+	}
+
+	data = node[i][j].color;
+	output++;
+	DFS(node, i, j);
+	Search(node, i, j + 1);
+}
+
+int main()
+{
+	Node **node;
+	char temp[101];
+	int i, j;
+	scanf("%d", &n);
+
+	node = (Node **)malloc(sizeof(Node *) * n);
+	for (i = 0; i < n; i++)
+	{
+		getchar();
+		node[i] = (Node *)malloc(sizeof(Node) * n);
+		scanf("%s", temp);
+		for (j = 0; j < n; j++)
+		{
+			node[i][j].color = temp[j];
+			node[i][j].visited = 0;
+		}
+	}
+
+	Search(node, 0, 0);
+	printf("%d ", output);
+
+	output = 0;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+			node[i][j].visited = 0;
+	}
+	
+	flag = 1;
+	Search(node, 0, 0);
+	printf("%d", output);
+
+	for (i = 0; i < n; i++)
+		free(node[i]);
+	free(node);
+	return 0;
+}
