@@ -1,0 +1,106 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int data;
+	int visited;
+	int *edge;
+	int size;
+}Node;
+
+int comp(const void *a, const void *b)
+{
+	int *pa = (int *)a;
+	int *pb = (int *)b;
+
+	if (*pa > *pb)	return 1;
+	if (*pa < *pb)	return -1;
+	return 0;
+}
+
+Node *getNode(int data, int n)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->data = data;
+	newNode->visited = 0;
+	newNode->edge = (int *)malloc(sizeof(int) * n);
+	newNode->size = 0;
+
+	return newNode;
+}
+
+void DFS(Node **node, int v)
+{
+	if (node[v]->visited == 1)
+		return;
+
+	node[v]->visited = 1;
+	printf("%d ", node[v]->data);
+
+	for (int i = 0; i < node[v]->size; i++)
+		DFS(node, node[v]->edge[i]);
+}
+
+void BFS(Node **node, int v, Node **queue, int *front, int *rear)
+{
+	printf("%d ", node[v]->data);
+
+	for (int i = 0; i < node[v]->size; i++)
+	{
+		if (node[node[v]->edge[i]]->visited == 0)
+		{
+			queue[(*rear)++] = node[node[v]->edge[i]];
+			node[node[v]->edge[i]]->visited = 1;
+		}
+	}
+	(*front)++;
+
+	if (*front == *rear)
+		return;
+
+	BFS(node, queue[(*front)]->data ,queue, front, rear);
+}
+
+int main()
+{
+	Node **node;
+	int i, n, m, v, num[2];
+	scanf("%d %d %d", &n, &m, &v);
+
+	node = (Node **)malloc(sizeof(Node *) * (n + 1));
+	for (i = 1; i <= n; i++)
+		node[i] = getNode(i, n - 1);
+
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d %d", &num[0], &num[1]);
+		node[num[0]]->edge[ (node[num[0]]->size)++ ] = num[1];
+		node[num[1]]->edge[ (node[num[1]]->size)++ ] = num[0];
+	}
+
+	for (i = 1; i <= n; i++)
+		qsort(node[i]->edge, node[i]->size, sizeof(int), comp);
+
+	DFS(node, v);
+	
+	printf("\n");
+	for (i = 1; i <= n; i++)
+		node[i]->visited = 0;
+
+	Node **queue = (Node **)malloc(sizeof(Node *) * n);
+	int front = 0, rear = 0;
+	queue[rear++] = node[v];
+	node[v]->visited = 1;
+
+	BFS(node, v, queue, &front, &rear);
+
+	for (i = 1; i <= n; i++)
+	{
+		free(node[i]->edge);
+		free(node[i]);
+	}
+	free(node);
+	return 0;
+}
