@@ -1,0 +1,110 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Queue
+{
+	int data;
+	int isThis;
+	struct Queue *prev;
+	struct Queue *next;
+}que;
+
+que *getQueue(int data)
+{
+	que *newQueue = (que *)malloc(sizeof(que));
+	newQueue->data = data;
+	newQueue->isThis = 0;
+	newQueue->prev = NULL;
+	newQueue->next = NULL;
+
+	return newQueue;
+}
+
+void push(que *tail, int data, int j, int m)
+{
+	que *newQueue = getQueue(data);
+
+	newQueue->prev = tail->prev;
+	newQueue->next = tail;
+
+	(tail->prev)->next = newQueue;
+	tail->prev = newQueue;
+
+	if (j == m)
+		newQueue->isThis = 1;
+}
+
+void pop(que *head, que *tail, int *output)
+{
+	que *temp = head, *search = head->next;
+	while (temp != tail)
+	{
+		temp = temp->next;
+		if (temp == search)
+			continue;
+
+		if (temp->data > search->data)
+		{
+			head->next = search->next;
+			(search->next)->prev = head;
+
+			search->next = tail;
+			search->prev = tail->prev;
+
+			(tail->prev)->next = search;
+			tail->prev = search;
+
+			pop(head, tail, output);
+			return;
+		}
+	}
+
+	(*output)++;
+	head->next = search->next;
+	(search->next)->prev = head;
+
+	if(search->isThis == 1)
+	{
+		free(search);
+		return;
+	}
+	pop(head, tail, output);
+}
+
+int main()
+{
+	que *head = getQueue(0), *tail = getQueue(0);
+	int i, j, testcase, n, m, data;
+	scanf("%d", &testcase);
+
+	for (i = 0; i < testcase; i++)
+	{
+		scanf("%d %d", &n, &m);
+		head->prev = tail;
+		head->next = tail;
+		tail->prev = head;
+		tail->next = head;
+
+		int output = 0;
+		for (j = 0; j < n; j++)
+		{
+			scanf("%d", &data);
+			push(tail, data, j, m);
+		}
+		
+		pop(head, tail, &output);
+
+		printf("%d\n", output);
+
+		que *temp = head->next, *del;
+		while (temp != tail)
+		{
+			del = temp;
+			temp = temp->next;
+			free(del);
+		}
+	}
+
+	return 0;
+}
