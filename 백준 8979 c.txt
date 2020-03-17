@@ -1,0 +1,57 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int country;
+	int gold;
+	int silver;
+	int bronze;
+	int rank;
+}Node;
+
+int main()
+{
+	Node *node;
+	int i, n, k, outputIndex;
+	scanf("%d %d", &n, &k);
+
+	node = (Node *)malloc(sizeof(Node) * n);
+	for (i = 0; i < n; i++)
+	{
+		scanf("%d %d %d %d", &node[i].country, &node[i].gold, &node[i].silver, &node[i].bronze);
+		node[i].rank = 1;
+		if (node[i].country == k)
+			outputIndex = i;
+	}
+
+
+	for (i = 0; i < n; i++)
+	{
+		if (node[outputIndex].gold < node[i].gold)
+		{
+			node[outputIndex].rank++;
+			continue;
+		}
+
+		if (node[outputIndex].gold == node[i].gold &&
+			node[outputIndex].silver < node[i].silver)
+		{
+			node[outputIndex].rank++;
+			continue;
+		}
+
+		if (node[outputIndex].gold == node[i].gold &&
+			node[outputIndex].silver == node[i].silver &&
+			node[outputIndex].bronze < node[i].bronze)
+		{
+			node[outputIndex].rank++;
+			continue;
+		}
+	}
+
+	printf("%d", node[outputIndex].rank);
+	free(node);
+	return 0;
+}
