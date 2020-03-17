@@ -1,0 +1,82 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct
+{
+	int data;
+	int *edge;
+	int size;
+	int length;
+}Node;
+
+Node *getNode(int data, int n)
+{
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->data = data;
+	newNode->edge = (int *)malloc(sizeof(int) * n);
+	newNode->size = 0;
+	newNode->length = 0;
+
+	return newNode;
+}
+
+void BFS(Node **node, int v, int n)
+{
+	Node **queue = (Node **)malloc(sizeof(Node *) * n);
+	int front = 0, rear = 0;
+	queue[rear++] = node[v];
+	node[v]->length = 0;
+
+	while (front != rear)
+	{
+		int vertex = queue[front++]->data;
+
+		for (int i = 0; i < node[vertex]->size; i++)
+		{
+			Node *edgeNode = node[node[vertex]->edge[i]];
+			if (edgeNode->length == 0)
+			{
+				queue[rear++] = edgeNode;
+				edgeNode->length = node[vertex]->length + 1;
+			}
+		}
+	}
+	free(queue);
+}
+
+int main()
+{
+	Node **node;
+	int i, n, num[2], m, edge[2];
+	scanf("%d", &n);
+	scanf("%d %d", &num[0], &num[1]);
+	scanf("%d", &m);
+
+	node = (Node **)malloc(sizeof(Node *) * (n + 1));
+	for (i = 1; i <= n; i++)
+		node[i] = getNode(i, n - 1);
+	
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d %d", &edge[0], &edge[1]);
+		node[edge[0]]->edge[ (node[edge[0]]->size)++ ] = edge[1];
+		node[edge[1]]->edge[ (node[edge[1]]->size)++ ] = edge[0];
+	}
+
+	BFS(node, num[0], n);
+	node[num[0]]->length = 0;
+
+	if (node[num[1]]->length != 0)
+		printf("%d", node[num[1]]->length);
+	else
+		printf("-1");
+
+	for (i = 1; i <= n; i++)
+	{
+		free(node[i]->edge);
+		free(node[i]);
+	}
+	free(node);
+	return 0;
+}
