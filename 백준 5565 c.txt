@@ -1,0 +1,16 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int i, n, arr[9];
+	scanf("%d", &n);
+	for(i = 0; i < 9; i++)
+	{ 
+		scanf("%d", &arr[i]);
+		n -= arr[i];
+	}
+
+	printf("%d", n);
+	return 0;
+}
