@@ -1,0 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+typedef struct node
+{
+	float price;
+	int gram;
+}Node;
+
+int main()
+{
+	int i, n;
+	float min;
+	Node seven25, other[100];
+	scanf("%f %d", &seven25.price, &seven25.gram);
+	min = seven25.price / seven25.gram * 1000;
+
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		scanf("%f %d", &other[i].price, &other[i].gram);
+
+		if(min > other[i].price / other[i].gram * 1000)
+			min = other[i].price / other[i].gram * 1000;;
+	}
+
+	printf("%.2f", min);
+
+	return 0;
+}
