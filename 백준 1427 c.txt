@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+int main()
+{
+	int i = 0, j, k, n, ar[10], temp;
+	scanf("%d", &n);
+
+	while (n != 0)
+	{
+		ar[i] = n % 10;
+		n /= 10;
+
+		for (j = 0; j < i; j++)
+		{
+			if (ar[i] > ar[j])
+			{
+				temp = ar[i];
+				for (k = i - 1; k >= j; k--)
+					ar[k + 1] = ar[k];
+				ar[j] = temp;
+				break;
+			}
+		}
+
+		i++;
+	}
+
+	for (j = 0; j < i; j++)
+		printf("%d", ar[j]);
+
+	return 0;
+}
