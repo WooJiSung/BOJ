@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int countScore(char *str)
+{
+	int score = 0, total = 0;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (str[i] == 'O')
+		{
+			score++;
+			total += score;
+		}
+
+		else if (str[i] == 'X')
+			score = 0;
+	}
+
+	return total;
+}
+
+int main()
+{
+	int num;
+	char **str;
+
+	scanf("%d", &num);
+	str = (char **)malloc(sizeof(char *) * num);
+	for (int i = 0; i < num; i++)
+	{
+		str[i] = (char *)malloc(sizeof(char) * 81);
+		scanf("%s", *(str+i));
+		printf("%d\n", countScore(*(str+i)));
+	}
+
+	for (int i = 0; i < num; i++)
+		free(str[i]);
+	free(str);
+
+	return 0;
+}
