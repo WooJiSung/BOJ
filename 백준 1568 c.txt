@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+int main()
+{
+	int N, sub = 1, output = 0;
+	scanf("%d", &N);
+
+	while (N != 0)
+	{
+		if (sub > N)
+			sub = 1;
+		N -= sub;
+		sub++;
+		output++;
+	}
+	printf("%d", output);
+	return 0;
+}
