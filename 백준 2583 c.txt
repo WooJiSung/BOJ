@@ -1,0 +1,108 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+	int data;
+	int visited;
+}Node;
+
+int comp(const void *a, const void *b)
+{
+	int *pa = (int *)a;
+	int *pb = (int *)b;
+
+	if (*pa > *pb)	return 1;
+	if (*pa < *pb)	return -1;
+	return 0;
+}
+
+int check(Node node)
+{
+	if (node.data == 1 && node.visited == 0)
+		return 1;
+	return 0;
+}
+
+int n, m, *arr;
+int size = 0;
+
+void DFS(Node **node, int i, int j)
+{
+	node[i][j].visited = 1;
+	arr[size]++;
+
+	if (j > 0 && check(node[i][j - 1]))		DFS(node, i, j - 1);
+	if (i > 0 && check(node[i - 1][j]))		DFS(node, i - 1, j);
+	if (j < m - 1 && check(node[i][j + 1]))	DFS(node, i, j + 1);
+	if (i < n - 1 && check(node[i + 1][j]))	DFS(node, i + 1, j);
+}
+
+void Search(Node **node, int i, int j, int *output)
+{
+	if (i == n)
+		return;
+
+	if (j == m)
+	{
+		Search(node, i + 1, 0, output);
+		return;
+	}
+
+	if (1 - check(node[i][j]))
+	{
+		Search(node, i, j + 1, output);
+		return;
+	}
+
+	(*output)++;
+	arr[size] = 0;
+	DFS(node, i, j);
+	size++;
+	Search(node, i, j + 1, output);
+}
+
+int main()
+{
+	Node **node;
+	int i, j, r, k, x[2], y[2];
+	scanf("%d %d %d", &m, &n, &k);
+
+	arr = (int *)malloc(sizeof(int) * (n * m / 2 + 1));
+	node = (Node **)malloc(sizeof(Node *) * n);
+	for (i = 0; i < n; i++)
+	{
+		node[i] = (Node *)malloc(sizeof(Node) * m);
+		for (j = 0; j < m; j++)
+		{
+			node[i][j].data = 1;
+			node[i][j].visited = 0;
+		}
+	}
+
+	for (i = 0; i < k; i++)
+	{
+		scanf("%d %d %d %d", &x[0], &y[0], &x[1], &y[1]);
+		for (j = x[0]; j < x[1]; j++)
+		{
+			for (r = y[0]; r < y[1]; r++)
+				node[j][r].data = 0;
+		}
+	}
+
+	int output = 0;
+	Search(node, 0, 0, &output);
+
+	printf("%d\n", output);
+	qsort(arr, size, sizeof(int), comp);
+	for (i = 0; i < size; i++)
+		printf("%d ", *(arr + i));
+
+	free(arr);
+	for (i = 0; i < n; i++)
+		free(node[i]);
+	free(node);
+	
+	return 0;
+}
