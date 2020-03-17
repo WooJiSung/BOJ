@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int i, N, *a, X;
+	scanf("%d %d", &N, &X);
+	a = (int *)malloc(sizeof(int) * N);
+
+	for (i = 0; i < N; i++)
+		scanf("%d", a+i);
+
+	for (i = 0; i < N; i++)
+	{
+		if (*(a + i) < X)
+			printf("%d ", *(a + i));
+	}
+	return 0;
+}
