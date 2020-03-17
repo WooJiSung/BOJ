@@ -1,0 +1,71 @@
+import java.util.*;
+
+class Main
+{
+	static void function(int[][] arr, int size, int[] output, int x, int y)
+	{
+		if(arr.length <= x || arr.length <= y)
+			return;
+		
+		int symbol = arr[x][y];
+		int flag = 1;
+		
+		for(int i = x; i < x + size; i++)
+		{
+			for(int j = y; j < y + size; j++)
+			{
+				if(arr[i][j] != symbol)
+				{
+					flag = 0;
+					break;
+				}
+			}
+			
+			if(flag == 0)
+				break;
+		}
+		
+		if(flag == 1)
+		{
+			output[symbol + 1] += 1;
+			return;
+		}
+		
+		else
+		{
+			int index = size / 3;
+			function(arr, index, output, x, y);
+			function(arr, index, output, x, y + index);
+			function(arr, index, output, x, y + index * 2);
+			function(arr, index, output, x + index, y);
+			function(arr, index, output, x + index, y + index);
+			function(arr, index, output, x + index, y + index * 2);
+			function(arr, index, output, x + index * 2, y);
+			function(arr, index, output, x + index * 2, y + index);
+			function(arr, index, output, x + index * 2, y + index * 2);
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		int[] output = new int[3];
+		for(int i = 0; i < 3; i++)
+			output[i] = 0;
+		
+		int N = sc.nextInt();
+		int[][] arr = new int[N][];
+		for(int i = 0; i < N; i++)
+		{
+			arr[i] = new int[N];
+			for(int j = 0; j < N; j++)
+				arr[i][j] = sc.nextInt();
+		}
+
+		function(arr, N, output, 0, 0);
+		
+		for(int i = 0; i < 3; i++)
+			System.out.println(output[i]);
+	}
+}
