@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node
+{
+	char data;
+	struct Node *parent;
+	struct Node *left;
+	struct Node *right;
+}Node;
+
+void NullNode(Node *node)
+{
+	node->left = NULL;
+	node->right = NULL;
+}
+
+Node **getNode(Node **node, char parentData, char leftData, char rightData)
+{
+	int index;
+
+	if (leftData != '.')
+	{
+		index = leftData - 65;
+		node[index] = (Node *)malloc(sizeof(Node));
+		node[parentData - 65]->left = node[index];
+
+		node[index]->data = leftData;
+		NullNode(node[index]);
+	}
+
+	if (rightData != '.')
+	{
+		index = rightData - 65;
+		node[index] = (Node *)malloc(sizeof(Node));
+		node[parentData - 65]->right = node[index];
+
+		node[index]->data = rightData;
+		NullNode(node[index]);
+	}
+
+	return node;
+}
+
+void preOrder(Node *node)
+{
+	if (node == NULL)
+		return;
+
+	printf("%c", node->data);
+	preOrder(node->left);
+	preOrder(node->right);
+}
+
+void inOrder(Node *node)
+{
+	if (node == NULL)
+		return;
+
+	inOrder(node->left);
+	printf("%c", node->data);
+	inOrder(node->right);
+}
+
+void postOrder(Node *node)
+{
+	if (node == NULL)
+		return;
+
+	postOrder(node->left);
+	postOrder(node->right);
+	printf("%c", node->data);
+}
+
+int main()
+{
+	Node **node;
+	char parentData, leftData, rightData;
+	int i, n;
+	scanf("%d", &n);
+	node = (Node **)malloc(sizeof(Node *) * 26);
+	
+	node[0] = (Node *)malloc(sizeof(Node));
+	node[0]->data = 'A';
+	NullNode(node[0]);
+	for (i = 0; i < n; i++)
+	{
+		getchar();
+		scanf("%c %c %c", &parentData, &leftData, &rightData);
+		node = getNode(node, parentData, leftData, rightData);
+	}
+
+	preOrder(node[0]);
+	printf("\n");
+	inOrder(node[0]);
+	printf("\n");
+	postOrder(node[0]);
+
+	for (i = 0; i < n; i++)
+		free(node[i]);
+	free(node);
+
+	return 0;
+}
